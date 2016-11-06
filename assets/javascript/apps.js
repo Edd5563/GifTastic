@@ -3,8 +3,8 @@ $(document).ready(function(){
 // list array
 var heroArray = [           // The Hero array
 "Superman", "Batman", "Spiderman", "Wolverine", "Wonder Woman", "Captain America", 
-"Hal Jordan", "Wally West", "The Hulk", "Daredevil", "Dick Grayson", "Jean GRey", 
-"Thor", "Morpheus", "Barbara Gordon", "Ben Grim The Thing", "James Gordon", "Cat Woman"];
+"Hal Jordan", "Wally West", "The Hulk", "Daredevil", "Dick Grayson", "Jean Grey", 
+"Thor", "Morpheus", "Barbara Gordon", "The Thing", "James Gordon", "Cat Woman"];
 
 //----------------------------------------------------
 	function makeBtn(){ 
@@ -13,7 +13,7 @@ var heroArray = [           // The Hero array
             // Dynamically makes my buttons to my array
 		for (var i = 0; i < heroArray.length; i++) {
 			heroArray[i];
-			var button = $('<button class="btn">');
+			var button = $('<button class="button">');
             button.attr("data-hero", heroArray[i]);
 			button.text(heroArray[i]);
 			$('#gifView').append(button);
@@ -29,14 +29,14 @@ var heroArray = [           // The Hero array
 
 	makeBtn();  // makes the new hero button
 
-$("#button").on('click', function() {
-    lookFor = $(this).data("hero");
+$(".button").on('click', function() {
+    var search = $(this).data("hero");
+    console.log(search);
 });
 
 var lookFor = "";
 var APIKey = "&api_key=dc6zaTOxFJmzC";
 var queryURL = "http://api.giphy.com/v1/gifs/search?q="+ lookFor + APIKey; 
-// console.log(query);
 
 var request = {
     url: queryURL,
