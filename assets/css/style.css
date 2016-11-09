@@ -1,4 +1,54 @@
-/*connected*/
-button, div, form, input {
-			margin: 10px;
-		}
+.displayArea{
+	padding: 30px;
+	
+}
+
+
+.gifBtn {
+	float: left;
+	max-width: 50%;
+	background-color: #4caf50;
+	border: solid #4caf50;
+	color: white;
+	padding: 10px;
+	border-left: solid #25A42A;
+	border-bottom: : solid #25A42A;
+	border-top: none;
+	border-right: none;
+	margin: 20px
+
+}
+
+
+.labelArea {
+	float: right;
+	max-width: 30%;
+	margin-right: 50px;
+
+}
+
+
+#addHeroGif {
+	background-color: #4caf50;
+	border: solid #4caf50;
+	color: white;
+	padding: 5px;
+	border-left: solid #25A42A;
+	border-bottom: : solid #25A42A;
+	border-top: none;
+	border-right: none;
+}
+
+.clearfix {
+	clear: both;
+}
+
+
+.gifImage{
+	padding: 20px;
+}
+
+
+
+
+
