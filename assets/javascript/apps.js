@@ -1,70 +1,77 @@
 //Connected.
 $(document).ready(function(){
-// list array
-var heroArray = [ //--------  The Hero array
-"Superman", "Batman", "Spiderman", "Wolverine", "Wonder Woman", "Captain America", 
-"Hal Jordan", "Wally West", "The Hulk", "Daredevil", "Dick Grayson", "Jean Grey", 
-"Thor", "Morpheus", "Barbara Gordon", "The Thing", "James Gordon", "Cat Woman"];
-
-//-------------------------------------------------------------------------  Ajax call section
-
-//----------------------- Ajax Section
-var search = 'Batman';
-var APIKey = "&api_key=dc6zaTOxFJmzC";
-var queryURL = "http://api.giphy.com/v1/gifs/search?q="+ search + "&limit=10&api_key=" + APIKey; 
-console.log(queryURL);     
-
-var request = {
-    url: queryURL,
-    method: "GET"
-};
+    var heroList = ["Superman", "Batman", "Spiderman", "Wolverine"];
+    var search = "";
+    var apiKey = "&api_key=dc6zaTOxFJmzC";
+    var queryURL = "http://api.giphy.com/v1/gifs/search?q="+ search + "&limit=10&api_key=" + apiKey; 
+    var limit = 10-1;    
 
 
 
-$.ajax(request).done(function(response) {
-    console.log(response);
-//-----------------------Pushing to html
-// $("#gifsShowHere")
-var gif = $('<img>');
- gif.attr("src", response.data[0].images.original.url);
-$("#gifsShowHere").append(gif);
-// $("#gifsShowHere").append(response.data.bitly_gif_url);
 
-}); // ajax call end
 
-//------------------------------------------------------------------------ Dynamic Buttons creation section
-    function makeBtn(){ 
-
-        $('#gifView').empty();
-//---------- Dynamically makes my buttons to my array
-        for (var i = 0; i < heroArray.length; i++) {
-            heroArray[i];
-            var button = $('<button class="button">');
-            button.attr("data-hero", heroArray[i]);
-            button.text(heroArray[i]);
-            $('#gifView').append(button);
+//---------------------------------------- Dynamic Buttons creation section
+    function renderBtn(){ 
+        $('.btnArea').empty();
+        for (var i = 0; i < heroList.length; i++) {
+            search = heroList[i]
+            queryURL = "http://api.giphy.com/v1/gifs/search?q="+ search + 
+            "&limit=10&api_key=" + apiKey;  
+            var heroBtn = $('<button>')
+            heroBtn.addClass('gifBtn');
+            heroBtn.attr("data-gif", queryURL);
+            heroBtn.text(heroList[i]);
+            $('.btnArea').append(heroBtn);
+            gif_Display();
         }
     }
-//----------- takes the hero informaiton from the input.
+
+
+
+
+//----------------------------------------  Pushes out new hero buttons
     $('#addHeroGif').on('click', function(){
-        var input = $('#hero_Input').val();
-        heroArray.push(input);
-        makeBtn();
-        return false;
-    }); // Bug When creating a new button, All of the buttons seem to lose their effectivitiness.
-
-    makeBtn();  // makes the new hero button
-
-
-$(".button").on('click', function() {
-    var search = $(this).data("hero");
-    console.log(search);
-});  // On click end
+            var hero = $('#hero_Input').val();
+            heroList.push(hero);
+            renderBtn();
+            return false;
+            }); 
 
 
 
 
 
+//---------------------------------------- calls the 4 in the array  at document load
+    renderBtn();  
+
+
+
+//---------------------------------------- ajax function
+function gif_Display() {
+    $('.gifBtn').on('click', function() {
+    var user = $(this);
+    var userClicked = user.data("gif");
+    console.log(userClicked);
+    
+    $.ajax({
+        url: userClicked,
+        method: "GET"
+    }).done(function(response) {   // <----- I think the error might also be coming from here*
+        $(".displayArea").empty();
+            for (var i = 0; i < limit; i++) {
+                var image = $("<img>");
+                image.addClass("gifImage");    
+                image.attr({
+                "src" : response.data[i].images.fixed_height_still.url,   
+                "data-gif" : userClicked,       //<--- specifically*
+                "data-stats": "still",
+                "data-index": i
+                });
+            $(".displayArea").append(image)
+            }
+        });
+});
+}
 
 
 
@@ -72,24 +79,76 @@ $(".button").on('click', function() {
 
 
 
+//------------ My still/live function.... 
+// Issues are here. When i click on the pictures its not goign live.
+// ive been working at this all day and i just cant see it :(
 
+$(document).on("click", "img.gifImage" , function() {
 
+    var user = $(this);
+    var userClicked = user.data("gif");
+    var picsIndex = user.data("index");
+    var status = user.data("status");
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    $.ajax({
+        url: userClicked,
+        method: "GET"
+        }).done(function(response) {
+            if (status == "still") {
+                $(".displayArea").empty();
+                for (var i = 0; i < limit; i++) {
+                    if (i != picsIndex) {
+                        var image = $("<img>");
+                        image.addClass("gifImage");
+                        image.attr({
+                            "src" : response.data[i].images.fixed_height_still.url,
+                            "data-gif" : userClicked,
+                            "data-stats": "still",
+                            "data-index": i
+                        });
+                        $(".displayArea").append(image)
+                    } else {
+                            var image = $("<img>");
+                            image.addClass("gifImage");
+                            image.attr({
+                                "src" : response.data[i].images.fixed_height.url,
+                                "data-gif" : userClicked,
+                                "data-stats": "live",
+                                "data-index": i
+                            });
+                        $(".displayArea").append(image)
+                        }
+                    }
+            } else if (status == "live") {
+                $(".displayArea").empty();
+                for (var i = 0; i < limit; i++) {
+                    if (i == picsIndex) {
+                        var image = $("<img>");
+                        image.addClass("gifImage");
+                        image.attr({
+                            "src" : response.data[i].images.fixed_height_still.url,
+                            "data-gif" : userClicked,
+                            "data-stats": "still",
+                            "data-index": i
+                        });
+                        $(".displayArea").append(image)
+                        } else {
+                            var image = $("<img>");
+                            image.addClass("gifImage");
+                            image.attr({
+                                "src" : response.data[i].images.fixed_height_still.url,
+                                "data-gif" : userClicked,
+                                "data-stats": "still",
+                                "data-index": i
+                            });
+                        $(".displayArea").append(image)
+                        }
+                }
+            }
+        });
+    });
+//----------------------------------------End of function
 
 
 }); // document ready closer
+
