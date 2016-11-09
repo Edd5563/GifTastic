@@ -1,7 +1,12 @@
 .displayArea{
 	padding: 30px;
-	
 }
+
+
+body {
+	background-color: lightgray;
+}
+
 
 
 .gifBtn {

@@ -34,6 +34,7 @@ $(document).ready(function(){
             var hero = $('#hero_Input').val();
             heroList.push(hero);
             renderBtn();
+            $('#hero_Input').val('');
             return false;
             }); 
 
