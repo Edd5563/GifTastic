@@ -63,7 +63,7 @@ function gif_Display() {
                 image.addClass("gifImage");    
                 image.attr({
                 "src" : response.data[i].images.fixed_height_still.url,   
-                "data-gif" : userClicked,       //<--- specifically*
+                "data-gif" : userClicked,
                 "data-stats": "still",
                 "data-index": i
                 });
@@ -88,13 +88,13 @@ $(document).on("click", "img.gifImage" , function() {
     var user = $(this);
     var userClicked = user.data("gif");
     var picsIndex = user.data("index");
-    var status = user.data("status");
+    var stats = user.data("stats");
 
     $.ajax({
         url: userClicked,
         method: "GET"
         }).done(function(response) {
-            if (status == "still") {
+            if (stats == "still") {
                 $(".displayArea").empty();
                 for (var i = 0; i < limit; i++) {
                     if (i != picsIndex) {
@@ -119,7 +119,7 @@ $(document).on("click", "img.gifImage" , function() {
                         $(".displayArea").append(image)
                         }
                     }
-            } else if (status == "live") {
+            } else if (stats == "live") {
                 $(".displayArea").empty();
                 for (var i = 0; i < limit; i++) {
                     if (i == picsIndex) {
